@@ -29,29 +29,111 @@ export const SmallButton: React.FC<Props> = ({ onPress, title }) => {
 };
 
 
-const TEMP = 31;
+let TEMP = 26;
+let Tsetting = 16;
+let Psetting = 1.4;
+let Isetting = 1;
+let Dsetting = 0.001;
+let STsetting = 15;
 
 export default function App() {
   return (
     <View style={styles.container}>
       <Text style={{color:'white',fontSize: 21, marginVertical: 30}}>
 	temperatura: 
-	<Text style={{color:(TEMP > 21 ? '#f04048' : (TEMP < 17 ? '#40c5f4' : 'white')),fontSize: 24,fontWeight: 'bold'}}> {TEMP}°C </Text>
+	<Text style={{color:(TEMP > 20 ? '#f04048' : (TEMP < 10 ? '#40c5f4' : 'white')),fontSize: 24,fontWeight: 'bold'}}> {TEMP}°C </Text>
       </Text>
-      <InputSpinner
-	  skin={'clean'}
-	  style={styles.item}
-	  width={180}
-          max={10}
-          min={2}
-          step={2}
-          colorMax={"#f04048"}
-          colorMin={"#40c5f4"}
-          value={4}
-          onChange={(num) => {
-          	console.log(num);
-          }}
-      />
+      <View style={styles.buttonslayout}>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> T </Text>
+      	<InputSpinner
+      	    skin={'clean'}
+      	    style={styles.item}
+      	    width={140}
+      	    max={24}
+      	    min={8}
+      	   step={1}
+      	    colorMax={"#f04048"}
+      	    colorMin={"#40c5f4"}
+      	    value={Tsetting}
+      	    onChange={(num) => {
+      	    	Tsetting = num;
+      	    }}
+      	/>
+      </View>
+      <View style={styles.buttonslayout}>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> P </Text>
+      	<InputSpinner
+      	    skin={'clean'}
+      	    style={styles.item}
+      	    width={140}
+	    type={"real"}
+      	    max={10}
+      	    min={0}
+	    step={0.1}
+	    precision={1} 
+      	    colorMax={"#f04048"}
+      	    colorMin={"#40c5f4"}
+      	    value={Psetting}
+      	    onChange={(num) => {
+      	    	Psetting = num;
+      	    }}
+      	/>
+      </View>
+      <View style={styles.buttonslayout}>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> I </Text>
+      	<InputSpinner
+      	    skin={'clean'}
+      	    style={styles.item}
+      	    width={140}
+	    type={"real"}
+      	    max={10}
+      	    min={0}
+	    step={0.1}
+	    precision={1} 
+      	    colorMax={"#f04048"}
+      	    colorMin={"#40c5f4"}
+      	    value={Isetting}
+      	    onChange={(num) => {
+      	    	Isetting = num;
+      	    }}
+      	/>
+      </View>
+      <View style={styles.buttonslayout}>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> D </Text>
+      	<InputSpinner
+      	    skin={'clean'}
+      	    style={styles.item}
+      	    width={140}
+	    type={"real"}
+      	    max={10}
+      	    min={0}
+	    step={0.005}
+	    precision={3} 
+      	    colorMax={"#f04048"}
+      	    colorMin={"#40c5f4"}
+      	    value={Dsetting}
+      	    onChange={(num) => {
+      	    	Dsetting = num;
+      	    }}
+      	/>
+      </View>
+      <View style={styles.buttonslayout}>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> ST </Text>
+      	<InputSpinner
+      	    skin={'clean'}
+      	    style={styles.item}
+      	    width={140}
+      	    max={30}
+      	    min={1}
+	    step={1}
+      	    colorMax={"#f04048"}
+      	    colorMin={"#40c5f4"}
+      	    value={STsetting}
+      	    onChange={(num) => {
+      	    	STsetting = num;
+      	    }}
+      	/>
+      </View>
       <SmallButton title="SUBMIT" />
     </View>
   );
@@ -64,6 +146,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonslayout: {
+    flexDirection: 'row',
+    width: 250,
+    justifyContent: 'space-evenly',
   },
   item: {
     marginVertical: 20,
