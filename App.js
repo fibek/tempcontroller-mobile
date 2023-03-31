@@ -9,6 +9,8 @@ type Props = {
   title: string;
 };
 
+const url='http://192.168.1.44:8000';
+
 export const SmallButton: React.FC<Props> = ({ onPress, title }) => {
   return (
     <Pressable
@@ -41,7 +43,7 @@ export default function App() {
  
   const loadAll = async () => {
     try {
-      const response = await fetch('http://192.168.1.15:8000/pid/status');
+      const response = await fetch(url+'/pid/status');
       const json = await response.json();
       setTEMP(json.Temperature);
       setT(json.Temperature);
@@ -59,7 +61,7 @@ export default function App() {
 
   const fetchTEMP = async() => {
     try {
-      const response = await fetch('http://192.168.1.15:8000/pid/status');
+      const response = await fetch(url+'/pid/status');
       const json = await response.json();
       setTEMP(json.Temperature);
     } catch (error) {
@@ -78,7 +80,7 @@ export default function App() {
 
   const SendData = async() => {
     try {
-      const response = await fetch('http://192.168.1.15:8000/pid/set', {
+      const response = await fetch(url+'/pid/set', {
 	method: 'PUT',
 	headers: {
 	  Accept: 'application/json',
