@@ -1,7 +1,8 @@
-import {useColorScheme} from 'react-native';
+import {useColorScheme, ActivityIndicator} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Pressable, Text, TouchableHighlightBase } from 'react-native';
 import InputSpinner from 'react-native-input-spinner';
+import React, { useState, useEffect } from 'react';
 
 type Props = {
   onPress?: () => void;
@@ -29,22 +30,81 @@ export const SmallButton: React.FC<Props> = ({ onPress, title }) => {
 };
 
 
-let TEMP = 26;
-let Tsetting = 16;
-let Psetting = 1.4;
-let Isetting = 1;
-let Dsetting = 0.001;
-let STsetting = 15;
-
 export default function App() {
+  const [TEMP, setTEMP] = useState(0);
+  const [isLoading, setLoading] = useState(true);
+  const [T, setT] = useState(0);
+  const [P, setP] = useState(0);
+  const [I, setI] = useState(0);
+  const [D, setD] = useState(0);
+  const [ST, setST] = useState(0);
+ 
+  const loadAll = async () => {
+    try {
+      const response = await fetch('http://192.168.1.15:8000/pid/status');
+      const json = await response.json();
+      setTEMP(json.Temperature);
+      setT(json.Temperature);
+      setP(json.P);
+      setI(json.I);
+      setD(json.D);
+      setST(json.SampleTime);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const fetchTEMP = async() => {
+    try {
+      const response = await fetch('http://192.168.1.15:8000/pid/status');
+      const json = await response.json();
+      setTEMP(json.Temperature);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    loadAll();
+
+    const interval = setInterval(() => {
+      fetchTEMP();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const SendData = async() => {
+    try {
+      const response = await fetch('http://192.168.1.15:8000/pid/set', {
+	method: 'PUT',
+	headers: {
+	  Accept: 'application/json',
+	  'Content-Type': 'application/json',
+	},
+	body: JSON.stringify({
+	  temp: T,
+	  p: P,
+  	  i: I,
+  	  d: D,
+  	  st: ST,
+	}),
+      });
+      console.log(response.ok);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <View style={styles.container}>
       <Text style={{color:'white',fontSize: 21, marginVertical: 30}}>
 	temperatura: 
-	<Text style={{color:(TEMP > 20 ? '#f04048' : (TEMP < 10 ? '#40c5f4' : 'white')),fontSize: 24,fontWeight: 'bold'}}> {TEMP}°C </Text>
+	<Text style={{color:(TEMP > 22 ? '#f04048' : (TEMP < 16 ? '#40c5f4' : 'lightgreen')),fontSize: 24,fontWeight: 'bold'}}> {TEMP}°C </Text>
       </Text>
       <View style={styles.buttonslayout}>
-	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> T </Text>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> {"T\x20\x20"} </Text>
       	<InputSpinner
       	    skin={'clean'}
       	    style={styles.item}
@@ -54,14 +114,14 @@ export default function App() {
       	   step={1}
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
-      	    value={Tsetting}
+      	    value={T}
       	    onChange={(num) => {
-      	    	Tsetting = num;
+	      setT(num);
       	    }}
       	/>
       </View>
       <View style={styles.buttonslayout}>
-	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> P </Text>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> {"P\x20\x20"} </Text>
       	<InputSpinner
       	    skin={'clean'}
       	    style={styles.item}
@@ -73,14 +133,14 @@ export default function App() {
 	    precision={1} 
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
-      	    value={Psetting}
+      	    value={P}
       	    onChange={(num) => {
-      	    	Psetting = num;
+	      setP(num)
       	    }}
       	/>
       </View>
       <View style={styles.buttonslayout}>
-	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> I </Text>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> {"I\x20\x20\x20"} </Text>
       	<InputSpinner
       	    skin={'clean'}
       	    style={styles.item}
@@ -92,14 +152,14 @@ export default function App() {
 	    precision={1} 
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
-      	    value={Isetting}
+      	    value={I}
       	    onChange={(num) => {
-      	    	Isetting = num;
+	      setI(num)
       	    }}
       	/>
       </View>
       <View style={styles.buttonslayout}>
-	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> D </Text>
+	<Text style={{color:'white',fontSize: 26,fontWeight: 'bold', marginVertical: 30}}> {"D\x20\x20"} </Text>
       	<InputSpinner
       	    skin={'clean'}
       	    style={styles.item}
@@ -111,9 +171,9 @@ export default function App() {
 	    precision={3} 
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
-      	    value={Dsetting}
+      	    value={D}
       	    onChange={(num) => {
-      	    	Dsetting = num;
+	      setD(num)
       	    }}
       	/>
       </View>
@@ -128,13 +188,13 @@ export default function App() {
 	    step={1}
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
-      	    value={STsetting}
+      	    value={ST}
       	    onChange={(num) => {
-      	    	STsetting = num;
+	      setST(num)
       	    }}
       	/>
       </View>
-      <SmallButton title="SUBMIT" />
+      <SmallButton title="SUBMIT" onPress={SendData} />
     </View>
   );
 }
@@ -157,3 +217,4 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+
