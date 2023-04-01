@@ -46,7 +46,7 @@ export default function App() {
       const response = await fetch(url+'/pid/status');
       const json = await response.json();
       setTEMP(json.Temperature);
-      setT(json.Temperature);
+      setT(json.T);
       setP(json.P);
       setI(json.I);
       setD(json.D);
@@ -87,11 +87,13 @@ export default function App() {
 	  'Content-Type': 'application/json',
 	},
 	body: JSON.stringify({
-	  temp: T,
-	  p: P,
-  	  i: I,
-  	  d: D,
-  	  st: ST,
+	  params: {
+	    temp: T,
+	    p: P,
+  	    i: I,
+  	    d: D,
+  	    st: ST,
+	  },
 	}),
       });
       console.log(response.ok);
@@ -111,7 +113,7 @@ export default function App() {
       	    skin={'clean'}
       	    style={styles.item}
       	    width={140}
-      	    max={24}
+      	    max={31}
       	    min={8}
       	   step={1}
       	    colorMax={"#f04048"}
@@ -185,7 +187,7 @@ export default function App() {
       	    skin={'clean'}
       	    style={styles.item}
       	    width={140}
-      	    max={30}
+      	    max={60}
       	    min={1}
 	    step={1}
       	    colorMax={"#f04048"}
