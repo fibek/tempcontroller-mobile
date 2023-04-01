@@ -113,9 +113,10 @@ export default function App() {
       	    skin={'clean'}
       	    style={styles.item}
       	    width={140}
-      	    max={31}
-      	    min={8}
-      	   step={1}
+	    type={"real"}
+      	    max={40}
+      	    min={1}
+      	   step={0.5}
       	    colorMax={"#f04048"}
       	    colorMin={"#40c5f4"}
       	    value={T}
@@ -131,7 +132,7 @@ export default function App() {
       	    style={styles.item}
       	    width={140}
 	    type={"real"}
-      	    max={10}
+      	    max={999}
       	    min={0}
 	    step={0.1}
 	    precision={1} 
@@ -150,7 +151,7 @@ export default function App() {
       	    style={styles.item}
       	    width={140}
 	    type={"real"}
-      	    max={10}
+      	    max={999}
       	    min={0}
 	    step={0.1}
 	    precision={1} 
@@ -169,7 +170,7 @@ export default function App() {
       	    style={styles.item}
       	    width={140}
 	    type={"real"}
-      	    max={10}
+      	    max={999}
       	    min={0}
 	    step={0.005}
 	    precision={3} 
@@ -187,7 +188,7 @@ export default function App() {
       	    skin={'clean'}
       	    style={styles.item}
       	    width={140}
-      	    max={60}
+      	    max={999}
       	    min={1}
 	    step={1}
       	    colorMax={"#f04048"}
